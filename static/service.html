@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>Petology</title>
+
+  <!-- slider stylesheet -->
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css" />
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Dosis:400,500|Poppins:400,700&display=swap" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="css/style.css" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="css/responsive.css" rel="stylesheet" />
+</head>
+
+<body class="sub_page">
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="index.html">
+            <img src="images/logo.png" alt="">
+            <span>
+              FAUNA SAVE
+            </span>
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
+              <ul class="navbar-nav  ">
+                <li class="nav-item active">
+                  <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="service.html">Prediksi </a>
+                </li>
+              </ul>
+            </div>
+            <div class="quote_btn-container  d-flex justify-content-center">
+              <a href="https://bksdadki.com/page/baca-informasi/Quick-Respon-Call-Center">
+                Telpon: 021-3908771 / 021-3158142 <br>
+                WA 0812 8964 2727
+              </a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div>
+
+<!-- buy section -->
+
+<section class="buy_section layout_padding">
+  <div class="container">
+    <h2>
+      Mari Memprediksi Satwa Langka Anda
+    </h2>
+    <p>
+      Letakkan File Gambar Disini
+    </p>
+    <div class="d-flex justify-content-center">
+      <input type="file" id="imageUpload" accept="image/*" style="margin-bottom: 20px;">
+    </div>
+    <div class="d-flex justify-content-center">
+      <a href="#" id="predictButton">
+        Prediksi
+      </a>
+    </div>
+    <div class="d-flex justify-content-center" id="imagePreviewContainer" style="margin-top: 20px;">
+      <img id="imagePreview" src="" alt="Image Preview" style="display: none; width: 360px; height: 246px;">
+    </div>
+  </div>
+</section>
+
+<!-- end buy section -->
+
+<script>
+  document.getElementById('imageUpload').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    const imagePreview = document.getElementById('imagePreview');
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        imagePreview.src = e.target.result;
+        imagePreview.style.display = 'block'; // Show the image
+      }
+      reader.readAsDataURL(file);
+    } else {
+      imagePreview.src = '';
+      imagePreview.style.display = 'none'; // Hide the image if no file is selected
+    }
+  });
+</script>
+  <!-- client section -->
+  <section class="client_section layout_padding-bottom">
+    <div class="container">
+      <h2 class="custom_heading text-center">
+        Cara
+        <span>
+          Pencegahan
+        </span>
+      </h2>
+      <p class="text-center">
+        Berikut Ini Merupakan Penjelasan Tentang Cara Konservasi Satwa Langka
+      </p>
+      <div id="carouselExample2Indicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#carouselExample2Indicators" data-slide-to="0" class="active"></li>
+          <li data-target="#carouselExample2Indicators" data-slide-to="1"></li>
+          <li data-target="#carouselExample2Indicators" data-slide-to="2"></li>
+          <li data-target="#carouselExample2Indicators" data-slide-to="3"></li>
+          <li data-target="#carouselExample2Indicators" data-slide-to="4"></li>
+        </ol>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="layout_padding2 pl-100">
+              <div class="client_container ">
+                <div class="img_box">
+                  <img src="hewan langka/Bekantan.jpeg" alt="">
+                </div>
+                <div class="detail_box">
+                  <h5>
+                    Bekantan 
+                  </h5>
+                  <p>
+                    Lindungi habitat mangrove dan hutan riparian.
+                    Edukasi masyarakat tentang pentingnya konservasi.
+                    Cegah perburuan liar melalui pengawasan hukum.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="layout_padding2 pl-100">
+              <div class="client_container ">
+                <div class="img_box">
+                  <img src="hewan langka/OrangUtan.jpg" alt="">
+                </div>
+                <div class="detail_box">
+                  <h5>
+                    Orangutan Kalimantan
+                  </h5>
+                  <p>
+                    Gunakan model habitat untuk pelepasliaran terencana.
+                    Pulihkan habitat melalui reforestasi.
+                    Minimalkan gangguan manusia di habitat utama.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="layout_padding2 pl-100">
+              <div class="client_container ">
+                <div class="img_box">
+                  <img src="hewan langka/Harimau.jpg" alt="">
+                </div>
+                <div class="detail_box">
+                  <h5>
+                    Harimau Sumatera
+                  </h5>
+                  <p>
+                    Cegah perburuan liar dengan patroli intensif.
+                    Batasi pembukaan lahan di kawasan konservasi.
+                    Revitalisasi tradisi lokal yang mendukung konservasi.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="layout_padding2 pl-100">
+              <div class="client_container ">
+                <div class="img_box">
+                  <img src="hewan langka/Gajah.jpeg" alt="">
+                </div>
+                <div class="detail_box">
+                  <h5>
+                    Gajah Sumatera
+                  </h5>
+                  <p>
+                    Kelola konflik manusia-gajah dengan zona konservasi.
+                    Terapkan undang-undang perlindungan habitat.
+                    Libatkan masyarakat lokal dalam pengawasan.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="layout_padding2 pl-100">
+              <div class="client_container ">
+                <div class="img_box">
+                  <img src="hewan langka/MonyetLangur.jpg" alt="">
+                </div>
+                <div class="detail_box">
+                  <h5>
+                    Monyet Langur
+                  </h5>
+                  <p>
+                    Pelihara dan pulihkan habitat alami di Taman Nasional.
+                    Lakukan survei rutin untuk memantau kondisi.
+                    Tingkatkan kesadaran warga lokal.
+                    Tegakkan hukum terhadap perburuan dan perdagangan ilegal.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+  </section>
+  <!-- end client section -->
+
+  <!-- footer section -->
+  <section class="container-fluid footer_section">
+    <p>
+      &copy;
+      <a href="https://html.design/">Prediksi Hewan Langka</a>
+    </p>
+  </section>
+  <!-- footer section -->
+
+  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Petology</title>
+  <link rel="stylesheet" href="css/bootstrap.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+   <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <!-- slider stylesheet -->
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css" />
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Dosis:400,500|Poppins:400,700&display=swap" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="css/style.css" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="css/responsive.css" rel="stylesheet" />
+
+</head>
+<body class="sub_page">
+    <div class="hero_area">
+    <!-- header section starts -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="index.html">
+            <img src="images/logo.png" alt="">
+            <span>
+              FAUNA SAVE
+            </span>
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
+              <ul class="navbar-nav  ">
+                <li class="nav-item active">
+                  <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="service.html">Prediksi </a>
+                </li>
+              </ul>
+            </div>
+            <div class="quote_btn-container  d-flex justify-content-center">
+              <a href="https://bksdadki.com/page/baca-informasi/Quick-Respon-Call-Center">
+                Telpon: 021-3908771 / 021-3158142 <br>
+                WA 0812 8964 2727
+              </a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div>
+
+  <section class="buy_section layout_padding">
+    <div class="container">
+      <h2>Prediksi Satwa Langka</h2>
+      <p>Unggah gambar atau gunakan kamera:</p>
+
+      <!-- Kamera -->
+      <div class="d-flex justify-content-center">
+        <video id="video" width="320" height="240" autoplay></video>
+      </div>
+      <div class="d-flex justify-content-center">
+        <button id="capture" class="btn btn-primary">Ambil Gambar</button>
+      </div>
+
+      <!-- Upload -->
+      <h3>Atau unggah gambar:</h3>
+      <div class="d-flex justify-content-center">
+        <input type="file" id="imageUpload" accept="image/*">
+      </div>
+
+      <!-- Preview -->
+      <div class="d-flex justify-content-center" style="margin-top: 20px;">
+        <img id="imagePreview" src="" alt="Preview" style="display:none; width: 360px; height: 246px;">
+      </div>
+
+      <!-- Hasil -->
+      <div class="d-flex justify-content-center" id="predictionResult" style="margin-top: 20px;"></div>
+    </div>
+  </section>
+
+  <script>
+    const video = document.getElementById('video');
+    const captureButton = document.getElementById('capture');
+    const imagePreview = document.getElementById('imagePreview');
+    const resultContainer = document.getElementById('predictionResult');
+
+    // Akses kamera
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        console.error('Error accessing webcam:', err);
+        resultContainer.innerHTML = `<p style="color:red;">Tidak bisa akses kamera: ${err.message}</p>`;
+      });
+
+    // Tangkap gambar dari kamera
+    captureButton.addEventListener('click', () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 320;
+      canvas.height = 240;
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageData = canvas.toDataURL('image/png');
+      imagePreview.src = imageData;
+      imagePreview.style.display = 'block';
+      fetchPrediction(imageData);
+    });
+
+    // Upload file
+    document.getElementById('imageUpload').addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        imagePreview.src = e.target.result;
+        imagePreview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+
+      const formData = new FormData();
+      formData.append('file', file);
+      fetchPrediction(formData);
+    });
+
+    // Kirim gambar ke backend Flask
+    async function fetchPrediction(data) {
+      let formData;
+      if (data instanceof FormData) {
+        formData = data; // File upload
+      } else {
+        formData = new FormData(); // Webcam base64
+        formData.append('image', data);
+      }
+
+      try {
+        const response = await fetch('http://127.0.0.1:5000/predict', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) throw new Error(await response.text());
+
+        const result = await response.json();
+        resultContainer.innerHTML = `<p>Label: ${result.label}</p><p>Confidence: ${result.confidence}</p>`;
+      } catch (error) {
+        resultContainer.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+      }
+    }
+  </script>
+<!-- client section -->
+    <section class="client_section layout_padding-bottom">
+      <div class="container">
+          <h2 class="custom_heading text-center">
+              Cara
+              <span>
+                  Pencegahan
+              </span>
+          </h2>
+          <p class="text-center">
+              Berikut Ini Merupakan Penjelasan Tentang Cara Konservasi Satwa Langka
+          </p>
+          <div id="carouselExample2Indicators" class="carousel slide" data-ride="carousel">
+              <ol class="carousel-indicators">
+                  <li data-target="#carouselExample2Indicators" data-slide-to="0" class="active"></li>
+                  <li data-target="#carouselExample2Indicators" data-slide-to="1"></li>
+                  <li data-target="#carouselExample2Indicators" data-slide-to="2"></li>
+                  <li data-target="#carouselExample2Indicators" data-slide-to="3"></li>
+                  <li data-target="#carouselExample2Indicators" data-slide-to="4"></li>
+              </ol>
+              <div class="carousel-inner">
+                  <div class="carousel-item active">
+                      <div class="layout_padding2 pl-100">
+                          <div class="client_container">
+                              <div class="img_box">
+                                  <img src="hewan langka/Bekantan.jpeg" alt="Bekantan">
+                              </div>
+                              <div class="detail_box">
+                                  <h5>Bekantan</h5>
+                                  <p>
+                                      Lindungi habitat mangrove dan hutan riparian.<br>
+                                      Edukasi masyarakat tentang pentingnya konservasi.<br>
+                                      Cegah perburuan liar melalui pengawasan hukum.
+                                  </p>
+                                  <p>
+                                      <strong>Artikel Terkait:</strong>
+                                      <ul>
+                                          <li><a href="https://www.tnsebangau.com/bekantan-nasalis-larvatus/" target="_blank">Bekantan di TN Sebangau</a></li>
+                                          <li><a href="https://www.balisafarimarinepark.com/bekantan-primata-langka-pulau-kalimantan/" target="_blank">Bekantan di Bali Safari</a></li>
+                                          <li><a href="https://kanalkomunikasi.pskl.menlhk.go.id/bekantan-dan-anak-muda-menolak-punah/" target="_blank">Bekantan dan Konservasi</a></li>
+                                      </ul>
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="carousel-item">
+                      <div class="layout_padding2 pl-100">
+                          <div class="client_container">
+                              <div class="img_box">
+                                  <img src="hewan langka/OrangUtan.jpg" alt="Orangutan Kalimantan">
+                              </div>
+                              <div class="detail_box">
+                                  <h5>Orangutan Kalimantan</h5>
+                                  <p>
+                                      Gunakan model habitat untuk pelepasliaran terencana.<br>
+                                      Pulihkan habitat melalui reforestasi.<br>
+                                      Minimalkan gangguan manusia di habitat utama.
+                                  </p>
+                                  <p>
+                                      <strong>Artikel Terkait:</strong>
+                                      <ul>
+                                          <li><a href="https://kompaspedia.kompas.id/baca/paparan-topik/konservasi-orangutan-di-indonesia" target="_blank">Konservasi Orangutan</a></li>
+                                          <li><a href="https://www.orangutan.or.id/id/why-orangutans-matter" target="_blank">Pentingnya Orangutan</a></li>
+                                      </ul>
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="carousel-item">
+                      <div class="layout_padding2 pl-100">
+                          <div class="client_container">
+                              <div class="img_box">
+                                  <img src="hewan langka/Harimau.jpg" alt="Harimau Sumatera">
+                              </div>
+                              <div class="detail_box">
+                                  <h5>Harimau Sumatera</h5>
+                                  <p>
+                                      Cegah perburuan liar dengan patroli intensif.<br>
+                                      Batasi pembukaan lahan di kawasan konservasi.<br>
+                                      Revitalisasi tradisi lokal yang mendukung konservasi.
+                                  </p>
+                                  <p>
+                                      <strong>Artikel Terkait:</strong>
+                                      <ul>
+                                          <li><a href="https://kompaspedia.kompas.id/baca/paparan-topik/konservasi-harimau-sumatera" target="_blank">Konservasi Harimau Sumatera</a></li>
+                                          <li><a href="https://beritalingkungan.com/harimau-sumatra-satwa-langka-yang-terancam-punah/" target="_blank">Harimau Terancam Punah</a></li>
+                                      </ul>
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="carousel-item">
+                      <div class="layout_padding2 pl-100">
+                          <div class="client_container">
+                              <div class="img_box">
+                                  <img src="hewan langka/Gajah.jpeg" alt="Gajah Sumatera">
+                              </div>
+                              <div class="detail_box">
+                                  <h5>Gajah Sumatera</h5>
+                                  <p>
+                                      Kelola konflik manusia-gajah dengan zona konservasi.<br>
+                                      Terapkan undang-undang perlindungan habitat.<br>
+                                      Libatkan masyarakat lokal dalam pengawasan.
+                                  </p>
+                                  <p>
+                                      <strong>Artikel Terkait:</strong>
+                                      <ul>
+                                          <li><a href="https://ugm.ac.id/id/berita/22256-peneliti-ugm-lakukan-konservasi-gajah-sumatera/" target="_blank">Konservasi Gajah UGM</a></li>
+                                          <li><a href="https://kompaspedia.kompas.id/baca/paparan-topik/konservasi-gajah-di-indonesia" target="_blank">Konservasi Gajah Indonesia</a></li>
+                                      </ul>
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="carousel-item">
+                      <div class="layout_padding2 pl-100">
+                          <div class="client_container">
+                              <div class="img_box">
+                                  <img src="hewan langka/MonyetLangur.jpg" alt="Monyet Langur">
+                              </div>
+                              <div class="detail_box">
+                                  <h5>Monyet Langur</h5>
+                                  <p>
+                                      Pelihara dan pulihkan habitat alami di Taman Nasional.<br>
+                                      Lakukan survei rutin untuk memantau kondisi.<br>
+                                      Tingkatkan kesadaran warga lokal.
+                                  </p>
+                                  <p>
+                                      <strong>Artikel Terkait:</strong>
+                                      <ul>
+                                          <li><a href="https://ksdae.menlhk.go.id/info/3446/eksplorasi-bukit-semujan-temukan-langur-borneo.html" target="_blank">Eksplorasi Bukit Semujan</a></li>
+                                          <li><a href="https://pesonabukitlawang.my.id/artikel/silvered-langur-(trachypithecus-cristatus)" target="_blank">Silvered Langur</a></li>
+                                      </ul>
+                                  </p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+  
+    <!-- end client section -->
+<section class="container-fluid footer_section">
+    <p>&copy; <a href="https://html.design/">Prediksi Hewan Langka</a></p>
+  </section>
+
+  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.js"></script>
+
+  <script src="js/bootstrap.js"></script>
+</body>
+</html>
