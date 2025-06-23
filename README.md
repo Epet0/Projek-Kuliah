@@ -24,6 +24,11 @@ Upload and photo animal images
 Receive classification results
 View species descriptions and conservation information
 
+Loss and Acuracy chart
+![image](https://github.com/user-attachments/assets/429ad4b1-9467-44af-be51-41e23e397ac4)
+![image](https://github.com/user-attachments/assets/69adabdd-c4f6-421c-b4be-fa7cabbfe4d2)
+
+
 Landing Page
 ![Screenshot 2025-06-23 102036](https://github.com/user-attachments/assets/0e125687-5eab-48f6-a3ac-1b2cc090e5aa)
 ![image](https://github.com/user-attachments/assets/f57a87ae-e417-4956-9f9b-1e2f4f079754)
